@@ -62,10 +62,7 @@ Desarrollar un sistema de gestión y control para el Aula Maker y la toma de asi
 
 ### Diagrama Entidad-Relación
 
-![ER Diagram](https://pub-6d0df2088ca448469603364b6f767396.r2.dev/png-preview-chat/VAbI6WPi2R)
-[Ver imagen en pantalla completa](https://pub-6d0df2088ca448469603364b6f767396.r2.dev/png-preview-chat/VAbI6WPi2R)
-[Editar diagrama](https://www.blocksandarrows.com/editor/3FD4BtWnNjrqdhe0)
-
+![ER Diagram](https://github.com/jjcampis/seminario_practica_informatica/blob/main/bases%20de%20datos/fotos/base.png)
 ## Instrucciones de Configuración
 
 ### Requisitos
