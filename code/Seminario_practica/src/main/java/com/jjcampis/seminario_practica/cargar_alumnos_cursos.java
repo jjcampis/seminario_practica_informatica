@@ -26,16 +26,19 @@ public class cargar_alumnos_cursos extends javax.swing.JFrame {
     private Map<String, Curso> cursoMap;//necesito mapear el curso ya que el objeto curso no puedo ponerlo directamente en el jcombobox
     private AlumnosDAO alumnosDAO;
     private Map<String, Alumno> alumnosMap;
+    private List<Integer> selectedAlumnos;//lista a enviar a la clase alumno para que gestione la asistencia
     private List<JToggleButton> toggleButtons;
     private boolean isTitleShown = true;//se usa para eliminar la opcion --Seleccione Curso
 
     public cargar_alumnos_cursos() {
         cursoDAO = new CursoDAO();
+        alumnosDAO = new AlumnosDAO();
         cursoMap = new HashMap<>();
         alumnosMap = new HashMap<>();
+        selectedAlumnos = new ArrayList<>();
         initComponents();
         loadCursos();
-        botoncitos(1);
+        botoncitos(0);
     }
     
     private void loadCursos() {
@@ -47,9 +50,6 @@ public class cargar_alumnos_cursos extends javax.swing.JFrame {
     }
     private void botoncitos(int id) {//botones que son los alumnos
         System.out.println("id: "+id);
-        if (alumnosDAO == null) {//pregunto si existe para no crear objetos sin necesidad
-            alumnosDAO = new AlumnosDAO();
-        }
         List<Alumno> alumnos = alumnosDAO.getAlumnos_cursos(id);
         System.out.println(alumnos);
         panelsito.removeAll();
@@ -82,10 +82,12 @@ public class cargar_alumnos_cursos extends javax.swing.JFrame {
                 alumnosMap.remove(alumno.toString());
             }
             System.out.println("Seleccionados:");
+            selectedAlumnos.clear();//necesito vaciar la lista antes de verificar los que estan marcados
             for (Alumno selectedAlumno : alumnosMap.values()) {
-                System.out.println(selectedAlumno+"id "+selectedAlumno.getId());
-                
+                //System.out.println(selectedAlumno+"id "+selectedAlumno.getId());
+                selectedAlumnos.add(selectedAlumno.getId());
             }
+            System.out.println(selectedAlumnos);
             
             
             
@@ -107,18 +109,39 @@ public class cargar_alumnos_cursos extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
-        jCheckBoxMenuItem2 = new javax.swing.JCheckBoxMenuItem();
+        alert = new javax.swing.JDialog();
+        jLabel3 = new javax.swing.JLabel();
         cursoComboBox = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         panelsito = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
-        jCheckBoxMenuItem1.setSelected(true);
-        jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
+        alert.setSize(new java.awt.Dimension(400, 300));
+        alert.setType(java.awt.Window.Type.POPUP);
 
-        jCheckBoxMenuItem2.setSelected(true);
-        jCheckBoxMenuItem2.setText("jCheckBoxMenuItem2");
+        jLabel3.setFont(new java.awt.Font("Oswald", 0, 18)); // NOI18N
+        jLabel3.setText("Datos Actualizados!");
+
+        javax.swing.GroupLayout alertLayout = new javax.swing.GroupLayout(alert.getContentPane());
+        alert.getContentPane().setLayout(alertLayout);
+        alertLayout.setHorizontalGroup(
+            alertLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(alertLayout.createSequentialGroup()
+                .addGap(139, 139, 139)
+                .addComponent(jLabel3)
+                .addContainerGap(125, Short.MAX_VALUE))
+        );
+        alertLayout.setVerticalGroup(
+            alertLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(alertLayout.createSequentialGroup()
+                .addGap(122, 122, 122)
+                .addComponent(jLabel3)
+                .addContainerGap(150, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(640, 480));
@@ -140,19 +163,58 @@ public class cargar_alumnos_cursos extends javax.swing.JFrame {
         panelsito.setLayout(new javax.swing.BoxLayout(panelsito, javax.swing.BoxLayout.Y_AXIS));
         jScrollPane2.setViewportView(panelsito);
 
+        jLabel2.setFont(new java.awt.Font("Oswald", 0, 14)); // NOI18N
+        jLabel2.setText("Para los Marcados:");
+
+        jButton2.setBackground(new java.awt.Color(204, 255, 204));
+        jButton2.setFont(new java.awt.Font("Oswald", 0, 12)); // NOI18N
+        jButton2.setText("Presente");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton1.setBackground(new java.awt.Color(255, 255, 204));
+        jButton1.setFont(new java.awt.Font("Oswald", 0, 12)); // NOI18N
+        jButton1.setText("Tardanza");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setBackground(new java.awt.Color(255, 204, 204));
+        jButton3.setFont(new java.awt.Font("Oswald", 0, 12)); // NOI18N
+        jButton3.setText("Ausente");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(217, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane2)
+                .addContainerGap(112, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cursoComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(189, 189, 189))
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jScrollPane2)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(cursoComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(186, 186, 186))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -163,7 +225,13 @@ public class cargar_alumnos_cursos extends javax.swing.JFrame {
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jButton2)
+                    .addComponent(jButton1)
+                    .addComponent(jButton3))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
 
         pack();
@@ -196,7 +264,7 @@ public class cargar_alumnos_cursos extends javax.swing.JFrame {
         //String selectedCourse = (String) comboBox.getSelectedItem();
         System.out.println("Curso seleccionado: " + selectedCourse);
         System.out.println("ID del curso seleccionado: " + selectedCourse.getId());
-        alumnosMap.clear();//necesito vaciar el mapa de alumnos seleccionados 
+        alumnosMap.clear();//necesito vaciar el mapa de alumnos seleccionados
         if (isTitleShown && !selectedCourseString.equals("--Seleccione Curso")) {
                 comboBox.removeItemAt(0); // Remuevo el primero item para que no aparezca la opcion de seleccione curso
                 isTitleShown = false;
@@ -208,6 +276,21 @@ public class cargar_alumnos_cursos extends javax.swing.JFrame {
                 botoncitos(selectedCourse.getId());
             }
     }//GEN-LAST:event_cursoComboBoxActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        //alert.setVisible(true);
+        System.out.println("Finalmente: "+selectedAlumnos);
+        //registrar asistencias (lista de alumnos, preceptor, estado)
+        alumnosDAO.registrarAsistencias(selectedAlumnos,1,"Ausente");
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        alumnosDAO.registrarAsistencias(selectedAlumnos,1,"Tardanza");
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        alumnosDAO.registrarAsistencias(selectedAlumnos,1,"Presente");
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -245,10 +328,14 @@ public class cargar_alumnos_cursos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDialog alert;
     private javax.swing.JComboBox<String> cursoComboBox;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem2;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel panelsito;
     // End of variables declaration//GEN-END:variables
